@@ -66,7 +66,7 @@ export default function Register() {
     <div className="auth-field">
       <label className="auth-label" htmlFor={id}>{label}</label>
       <div className="auth-input-wrap">
-        <span className="auth-input-icon"><Icon size={15} /></span>
+        <span className="auth-input-icon"><Icon size={14} /></span>
         <input id={id} type={type} className={`auth-input${mono ? ' auth-otp-input' : ''}`}
           placeholder={placeholder} value={value} onChange={onChange} />
       </div>
@@ -84,64 +84,40 @@ export default function Register() {
 
   return (
     <div className="auth-page">
-
       {/* ── Left Panel ─────────────────────── */}
       <div className="auth-panel">
         <img src="/auth-banner.png" alt="QuickBite" />
         <div className="auth-panel-overlay">
-          <div className="auth-panel-brand">
-            <div className="auth-panel-logo"><Flame size={22} color="#e63946" strokeWidth={2.5} /></div>
-            <div className="auth-panel-brand-name">Quick<span>Bite</span></div>
-          </div>
-          <h2 className="auth-panel-heading">
-            {role === 'admin' ? 'Grow your\nbusiness online.' : 'Join thousands\nof happy diners.'}
-          </h2>
-          <p className="auth-panel-sub">
-            {role === 'admin'
-              ? 'Register as a seller to list your menu, accept orders, and get paid directly via UPI — all from one dashboard.'
-              : 'Create your free account to order from top local restaurants, track deliveries live, and save your favorites.'}
-          </p>
-          <div className="auth-panel-pills">
-            {role === 'admin' ? (
-              <><span className="auth-panel-pill">UPI Payouts</span><span className="auth-panel-pill">Live Orders</span><span className="auth-panel-pill">Analytics</span></>
-            ) : (
-              <><span className="auth-panel-pill">Live Tracking</span><span className="auth-panel-pill">Secure Payments</span><span className="auth-panel-pill">Free Delivery</span></>
-            )}
-          </div>
         </div>
       </div>
 
       {/* ── Right Form ─────────────────────── */}
       <div className="auth-form-side">
-        <div className="auth-form-box">
-
-          {/* Brand */}
+        <div className="auth-form-box" style={{ maxWidth: role === 'admin' ? '540px' : '380px' }}>
+          
           <div className="auth-brand-row">
             <div className="auth-brand-dot"><Flame size={18} color="#fff" strokeWidth={2.5} /></div>
             <span className="auth-brand-label">QuickBite</span>
           </div>
 
-          <h1 className="auth-heading">Create account</h1>
-          <p className="auth-sub">Join as a customer or register your restaurant</p>
+          <h1 className="auth-heading">Create an account</h1>
+          <p className="auth-sub">Set up your profile to customize your experience.</p>
 
-          {/* Role Toggle */}
           <div className="auth-role-toggle">
             <button type="button" className={`auth-role-btn ${role === 'customer' ? 'active' : ''}`} onClick={() => setRole('customer')}>
               <User size={15} /> Customer
             </button>
             <button type="button" className={`auth-role-btn ${role === 'admin' ? 'active' : ''}`} onClick={() => setRole('admin')}>
-              <Building2 size={15} /> Seller / Restaurant
+              <Building2 size={15} /> Restaurant Partner
             </button>
           </div>
 
-          {/* Error */}
           {error && (
             <div className="auth-alert error">
               <AlertCircle size={15} /><span>{error}</span>
             </div>
           )}
 
-          {/* Success */}
           {success ? (
             <div style={{ textAlign: 'center', padding: '2rem 0' }}>
               <div className="auth-success-circle">
@@ -159,26 +135,31 @@ export default function Register() {
             </div>
           ) : (
             <form onSubmit={handleRegister}>
-              {/* ── Basic Fields ── */}
-              <Field label="Full Name" icon={User} id="name" placeholder="John Doe" value={form.name} onChange={set('name')} />
-              <Field label="Email Address" icon={Mail} id="email" type="email" placeholder="john@example.com" value={form.email} onChange={set('email')} />
-              <Field label="Password" icon={Lock} id="password" type="password" placeholder="Min. 6 characters" value={form.password} onChange={set('password')} />
+              <div className="auth-row-2">
+                <Field label="Full Name" icon={User} id="name" placeholder="E.g. Aman" value={form.name} onChange={set('name')} />
+                <Field label="Email Address" icon={Mail} id="email" type="email" placeholder="aman@company.com" value={form.email} onChange={set('email')} />
+              </div>
+              <Field label="Password" icon={Lock} id="password" type="password" placeholder="Min. 8 characters" value={form.password} onChange={set('password')} />
 
-              {/* ── Seller-Only Fields ── */}
               {role === 'admin' && (
                 <>
-                  <div className="auth-section-title">Legal &amp; Business Details</div>
-                  <Field label="Business / Restaurant Name" icon={Building2} id="businessName" placeholder="Spice Garden Restaurant" value={form.businessName} onChange={set('businessName')} />
-                  <Field label="GSTIN Number" icon={Briefcase} id="gstin" placeholder="22AAAAA0000A1Z5" value={form.gstin} onChange={e => setForm(f => ({ ...f, gstin: e.target.value.toUpperCase() }))} />
-                  <Field label="PAN Card" icon={CreditCard} id="pan" placeholder="ABCDE1234F" value={form.pan} onChange={e => setForm(f => ({ ...f, pan: e.target.value.toUpperCase() }))} />
-                  <Field label="FSSAI License Number" icon={ShieldAlert} id="fssai" placeholder="14-digit FSSAI number" value={form.fssai} onChange={set('fssai')} />
+                  <div className="auth-section-title">Business Registration</div>
+                  <Field label="Restaurant / Legal Entity Name" icon={Building2} id="businessName" placeholder="Spice Garden Pvt Ltd." value={form.businessName} onChange={set('businessName')} />
+                  
+                  <div className="auth-row-2">
+                    <Field label="GSTIN Number" icon={Briefcase} id="gstin" placeholder="22AAAAA0000A1Z5" value={form.gstin} onChange={e => setForm(f => ({ ...f, gstin: e.target.value.toUpperCase() }))} />
+                    <Field label="PAN Card" icon={CreditCard} id="pan" placeholder="ABCDE1234F" value={form.pan} onChange={e => setForm(f => ({ ...f, pan: e.target.value.toUpperCase() }))} />
+                  </div>
 
-                  <div className="auth-section-title">Payout Details</div>
-                  <Field label="UPI ID (for payouts)" icon={CreditCard} id="upiId" placeholder="yourname@upi or 98765@paytm" value={form.upiId} onChange={set('upiId')} />
-                  <TextareaField label="Bank Account Details" id="bankDetails" placeholder="Bank Name, Account No, IFSC Code" value={form.bankDetails} onChange={set('bankDetails')} />
+                  <div className="auth-row-2">
+                    <Field label="FSSAI License No." icon={ShieldAlert} id="fssai" placeholder="14-digit FSSAI" value={form.fssai} onChange={set('fssai')} />
+                    <Field label="Payout UPI ID" icon={CreditCard} id="upiId" placeholder="merchant@upi" value={form.upiId} onChange={set('upiId')} />
+                  </div>
 
-                  <div className="auth-section-title">Address</div>
-                  <TextareaField label="Restaurant / Warehouse Address Proof" id="addressProof" placeholder="Full address + proof type (Utility Bill, Rent Agreement…)" value={form.addressProof} onChange={set('addressProof')} />
+                  <div className="auth-row-2">
+                    <TextareaField label="Exact Bank Details" id="bankDetails" placeholder="Bank Name, A/C Number, IFSC Code" value={form.bankDetails} onChange={set('bankDetails')} />
+                    <TextareaField label="Warehouse / Premises Address" id="addressProof" placeholder="Attach full operating address proof" value={form.addressProof} onChange={set('addressProof')} />
+                  </div>
                 </>
               )}
 
@@ -186,11 +167,11 @@ export default function Register() {
                 <button type="submit" className="btn-auth-primary" disabled={loading}>
                   {loading
                     ? <><div className="auth-spinner" /> Processing…</>
-                    : <>{role === 'admin' ? 'Submit Application' : 'Create Account'} <ArrowRight size={15} /></>}
+                    : <>{role === 'admin' ? 'Submit Registration' : 'Create Account'} <ArrowRight size={15} /></>}
                 </button>
               </div>
 
-              <div className="auth-divider" style={{ margin: '1.25rem 0' }}>already have an account?</div>
+              <div className="auth-divider" style={{ margin: '1.5rem 0' }}>already have an account?</div>
 
               <button type="button" className="btn-auth-secondary" style={{ marginTop: 0 }} onClick={() => navigate('/')}>
                 Sign in instead
@@ -198,8 +179,8 @@ export default function Register() {
             </form>
           )}
 
-          <div className="auth-footer">
-            <ShieldAlert size={12} /> Secured by QuickBite &nbsp;·&nbsp; 256-bit SSL
+          <div className="auth-footer" style={{ marginTop: '2rem' }}>
+            <ShieldAlert size={12} /> Google Workspace Level Security &nbsp;·&nbsp; Protected by reCAPTCHA
           </div>
         </div>
       </div>
